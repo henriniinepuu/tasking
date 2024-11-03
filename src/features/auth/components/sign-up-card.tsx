@@ -1,13 +1,19 @@
-"use client";
+"use client"
 
-import { DottedSeparator } from "@/components/dotted-separator";
-import { Button } from "@/components/ui/button";
+import { DottedSeparator } from "@/components/dotted-separator"
+import { Button } from "@/components/ui/button"
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Input } from "@/components/ui/input";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle
+} from "@/components/ui/card"
 import {
     Form,
     FormControl,
@@ -15,38 +21,48 @@ import {
     FormItem,
     FormMessage,
 } from "@/components/ui/form";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle
-} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import Link from "next/link";
-import { loginSchema } from "../schemas";
-import { useLogin } from "../api/use-login";
+import { registerSchema } from "../schemas";
+import { useRegister } from "../api/user-register";
 
 
-export const SignInCard = () => {
-    const { mutate } = useLogin();
+export const SignUpCard = () => {
+    const {mutate} = useRegister();
 
-    const form = useForm<z.infer<typeof loginSchema>>({
-        resolver: zodResolver(loginSchema),
+
+    const form = useForm<z.infer<typeof registerSchema>>({
+        resolver: zodResolver(registerSchema),
         defaultValues: {
+            name: "",
             email: "",
             password: "",
         }
     });
 
-    const onSubmit = (values: z.infer<typeof loginSchema>) => {
+    const onSubmit = (values: z.infer<typeof registerSchema>) => {
+        console.log({values});
         mutate({ json: values});
     }
 
     return(
+        
+
+
         <Card className="w-full h-full md:w-[487px] border-none shadow-none">
             <CardHeader className="flex items-center justify-center text-center p-7">
                 <CardTitle className="text-2xl">
-                    Welcome back!
+                    Sign up
                 </CardTitle>
+                <CardDescription>
+                    By signing up, you agree to our {" "}
+                    <Link href="/privacy" className="text-blue-700">
+                        <span>Privacy policy</span>
+                    </Link> {" and "}
+                    <Link href="/terms" className="text-blue-700">
+                        <span>Terms of Service</span>
+                    </Link>
+                </CardDescription>
             </CardHeader>
             <div className="px-7">
                 <DottedSeparator></DottedSeparator>
@@ -54,6 +70,21 @@ export const SignInCard = () => {
             <CardContent className="p-7">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <FormField 
+                            name="name" 
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Input
+                                            {...field}
+                                            type="text"
+                                            placeholder="Username">
+                                        </Input>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                        )}/>
                         <FormField 
                             name="email" 
                             control={form.control}
@@ -85,7 +116,7 @@ export const SignInCard = () => {
                                 </FormItem>
                         )}/>
                         <Button disabled={false} size="lg" className="w-full">
-                            Login
+                            Sign up
                         </Button>
                     </form>
                 </Form>
@@ -107,11 +138,9 @@ export const SignInCard = () => {
                 <DottedSeparator />
                 <CardContent className="p-7 flex items-center justify-center">
                     <p>
-                        Don&apos;t have an account?
-                        <Link href="/sign-up">
-                            <span className="text-blue-700">
-                                {" "}Sign up
-                            </span>
+                        Already have an account?
+                        <Link href="/sign-in">
+                            <span className="text-blue-700">{" "}Sign in</span>
                         </Link>
                     </p>
                 </CardContent>
