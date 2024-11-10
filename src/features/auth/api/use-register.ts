@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {InferRequestType, InferResponseType} from "hono";
 import {client} from "@/lib/rpc";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type ResponseType = InferResponseType<typeof client.api.auth.register["$post"]>;
 type RequestType = InferRequestType<typeof client.api.auth.register["$post"]>;
@@ -22,6 +23,10 @@ export const useRegister = () => {
         onSuccess: () => {
             router.refresh();
             queryClient.invalidateQueries({queryKey: ["current"]});
+            toast.success("Account created");
+        },
+        onError: () => {
+            toast.error("Failed to create an account");
         }
         
     })
