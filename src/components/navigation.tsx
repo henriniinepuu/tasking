@@ -6,7 +6,7 @@ import { GoCheckCircle, GoCheckCircleFill, GoHome, GoHomeFill, GoKey } from "rea
 const routes = [
     {
         label: "Home",
-        href: "",
+        href: "/",
         icon: GoHome,
         activeIcon: GoHomeFill,
     },
