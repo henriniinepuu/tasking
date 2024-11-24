@@ -1,4 +1,5 @@
 "use client"
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { createWorkspaceSchema } from "../schemas";
@@ -20,6 +21,8 @@ import { DottedSeparator } from "@/components/dotted-separator";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useCreateWorkspace } from "../api/use-create-workspace";
+import { useRouter } from "next/navigation";
+import { CreateWorkspaceModal } from "./create-workspace-modal";
 
 
 interface CreateWorkspaceFormProps {
@@ -29,6 +32,7 @@ interface CreateWorkspaceFormProps {
 export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
     const { mutate, isPending } = useCreateWorkspace();
     const inputRef = useRef<HTMLInputElement>(null);
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof createWorkspaceSchema>>({
         resolver: zodResolver(createWorkspaceSchema),
@@ -44,9 +48,10 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
         }
         
         mutate({ form: finalValues}, {
-            onSuccess: () => {
-                form.reset();
-                // TODO: Redirect to new workspace
+            onSuccess: ( {data} ) => {
+               router.push(`/workspaces/${data.$id}`);
+               //TODO: For some reason it does not not close the create-workspace-model. URL is correct
+               form.reset();
             }
         })
     }

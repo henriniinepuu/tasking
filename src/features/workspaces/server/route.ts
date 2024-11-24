@@ -5,6 +5,7 @@ import { sessionMiddleware } from "@/lib/session-middleware";
 import { DATABASE_ID, IMAGES_BUCKET_ID, MEMBERS_ID, WORKSPACES_ID } from "@/config";
 import { ID, Query, Users } from "node-appwrite";
 import { MemberRole } from "@/features/members/types";
+import { generateInviteCode } from "@/lib/utils";
 
 const app = new Hono()
     .get(
@@ -74,6 +75,7 @@ const app = new Hono()
                     name, 
                     userId: user.$id,
                     imageUrl: uploadedImageUrl,
+                    inviteCode: generateInviteCode(10)
                 },
             );
 
