@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { useCreateWorkspace } from "../api/use-create-workspace";
 import { useRouter } from "next/navigation";
 import { CreateWorkspaceModal } from "./create-workspace-modal";
+import { cn } from "@/lib/utils";
 
 
 interface CreateWorkspaceFormProps {
@@ -50,7 +51,7 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
         mutate({ form: finalValues}, {
             onSuccess: ( {data} ) => {
                router.push(`/workspaces/${data.$id}`);
-               //TODO: For some reason it does not not close the create-workspace-model. URL is correct
+               //TODO: For some reason it does not not close the create-workspace-model. URL is correct. Happens only with Modal
                form.reset();
             }
         })
@@ -158,6 +159,7 @@ export const CreateWorkspaceForm = ({ onCancel }: CreateWorkspaceFormProps) => {
                             variant="secondary"
                             onClick={onCancel}
                             disabled={isPending}
+                            className={cn(!onCancel && "invisible")}
                             >
                             Cancel
                         </Button>
